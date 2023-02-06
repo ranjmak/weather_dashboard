@@ -39,11 +39,9 @@ $(document).ready(function () {
   $(document).on("click", ".search-button", function (event) {
     event.preventDefault();
 
-    
     var city = $("#search-input").val().trim();
-    console.log("text: ", $(event.target).text(), "city: ", city);
+
     var savedCity = $(event.target).text();
-    console.log("saved city: ", savedCity, "search-button: ", $("#search-button").text());
 
     if (!city && savedCity != $("#search-button").text()) {
       city = $(event.target).text();
@@ -55,14 +53,8 @@ $(document).ready(function () {
     else {
       $("#search-input").val("");
     }
-    /*
-    else {
-      city = $("#search-input").val().trim();
-    }
-*/
-    console.log("city: ", city);
+
     var index = getStoredData(city);
-    console.log("index: ", index);
 
     if (index < 0) {
       var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q=";
@@ -85,16 +77,12 @@ $(document).ready(function () {
     }
     
     else {
-      console.log("gonna do the else!");
       getAndRenderData(index);
 
     }
-    console.log("returning from listener");
-    //return;
   });
 
   function getAndRenderData(index) {
-    console.log(index);
     queryURL =
       baseURL +
       "lat=" +
@@ -102,13 +90,10 @@ $(document).ready(function () {
       "&lon=" +
       cityData[index].lon +
       APIKey;
-    console.log(queryURL);
-
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-      console.log(response);
 
       // the temperature (converted from Kelvin)
       var forecast = response.list;
