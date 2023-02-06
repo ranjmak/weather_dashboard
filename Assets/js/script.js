@@ -137,7 +137,8 @@ $(document).ready(function () {
       $(".humidity").text("humidity: " + forecast[0].main.humidity + "%");
 
       $("#forecast").empty();
-
+      $("#forecastTitle").html("<h2>5 Day Forecast</h2>");
+      
       for (var i in forecast) {
         var date = moment(forecast[i].dt_txt);
 
