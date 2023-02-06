@@ -21,14 +21,23 @@ $(document).ready(function () {
     if (tempCityData) {
       cityData = JSON.parse(tempCityData);
       console.log("citydatra: ",cityData);
-    }
-    $(".list-group").empty();
-    for (var i=0; i<cityData.length; i++) {
 
-      $(".list-group").append(
-                  $("<button>").attr({class: "btn btn-outline btn-xl search-button"}).text(cityData[i].name));
+      $("#history").empty();
+      for (var i=0; i<cityData.length; i++) {
+        $("#history").append(
+                    $("<button>").attr({class: "btn btn-outline btn-xl search-button"}).text(cityData[i].name));
+      }
+      $("#history").prepend($("<button>").attr({class: "btn btn-outline btn-xl clear"}).text("clear history"));
     }
   }
+
+  $(document).on("click", ".clear", function(event) {
+    event.preventDefault();
+    //cityData = "";
+    localStorage.removeItem("cityData")
+    //storeCitiesData();
+    $("#history").empty();
+  });
 
   fetchStoredData();
 
