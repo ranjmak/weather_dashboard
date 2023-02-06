@@ -8,7 +8,7 @@ $(document).ready(function () {
     fetchStoredData();
     var index = -1;
     for (var i=0; i<cityData.length; i++) {
-      console.log("name: ", i, cityData[i].name);
+      
       if (cityData[i].name == city) {
         index = i;
       }
@@ -20,8 +20,6 @@ $(document).ready(function () {
     var tempCityData = localStorage.getItem("cityData");
     if (tempCityData) {
       cityData = JSON.parse(tempCityData);
-      console.log("citydatra: ",cityData);
-
       $("#history").empty();
       for (var i=0; i<cityData.length; i++) {
         $("#history").append(
@@ -33,10 +31,10 @@ $(document).ready(function () {
 
   $(document).on("click", ".clear", function(event) {
     event.preventDefault();
-    //cityData = "";
+    cityData = [];
     localStorage.removeItem("cityData")
-    //storeCitiesData();
     $("#history").empty();
+    fetchStoredData();
   });
 
   fetchStoredData();
@@ -45,8 +43,8 @@ $(document).ready(function () {
     localStorage.setItem("cityData", JSON.stringify(cityData));
   }
 
-  function capitaliseCity(str) {
-    return str
+  function capitaliseCity(city) {
+    return city
       .replace(/(\B)[^ ]*/g, match => (match.toLowerCase()))
       .replace(/^[^ ]/g, match => (match.toUpperCase()));
   }
@@ -54,28 +52,19 @@ $(document).ready(function () {
   $(document).on("click", ".search-button", function (event) {
     event.preventDefault();
 
-    
     var city = $("#search-input").val().trim();
     city = capitaliseCity(city);
-    console.log("text: ", $(event.target).text(), "city: ", city);
     var savedCity = $(event.target).text();
-    console.log("saved city: ", savedCity, "search-button: ", $("#search-button").text());
-
     if (!city && savedCity != $("#search-button").text()) {
       city = $(event.target).text();
     }
     else if (!city) {
-      console.log("early return");
       return;
     }
     else {
       $("#search-input").val("");
     }
-
-    console.log("city: ", city);
     var index = getStoredData(city);
-    console.log("index: ", index);
-
     if (index < 0) {
       var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q=";
       $.ajax({
@@ -97,16 +86,11 @@ $(document).ready(function () {
     }
     
     else {
-      console.log("gonna do the else!");
       getAndRenderData(index);
-
     }
-    console.log("returning from listener");
-    //return;
   });
 
   function getAndRenderData(index) {
-    console.log(index);
     queryURL =
       baseURL +
       "lat=" +
@@ -114,14 +98,11 @@ $(document).ready(function () {
       "&lon=" +
       cityData[index].lon +
       APIKey;
-    console.log(queryURL);
 
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
-      console.log(response);
-
       // the temperature (converted from Kelvin)
       var forecast = response.list;
       var temperature = (forecast[0].main.temp - 273.15).toFixed(0);
@@ -188,10 +169,8 @@ $(document).ready(function () {
           $("#forecast").append(col);
         }
       }
-      console.log("finished with render");
       return;
     });
-    console.log("returning from render")
     return;
   }
 });
