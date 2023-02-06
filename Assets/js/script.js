@@ -20,6 +20,7 @@ $(document).ready(function () {
     var tempCityData = localStorage.getItem("cityData");
     if (tempCityData) {
       cityData = JSON.parse(tempCityData);
+      console.log("citydatra: ",cityData);
     }
     $(".list-group").empty();
     for (var i=0; i<cityData.length; i++) {
@@ -35,13 +36,21 @@ $(document).ready(function () {
     localStorage.setItem("cityData", JSON.stringify(cityData));
   }
 
+  function capitaliseCity(str) {
+    return str
+      .replace(/(\B)[^ ]*/g, match => (match.toLowerCase()))
+      .replace(/^[^ ]/g, match => (match.toUpperCase()));
+  }
   // listener for the search submit button
   $(document).on("click", ".search-button", function (event) {
     event.preventDefault();
 
+    
     var city = $("#search-input").val().trim();
-
+    city = capitaliseCity(city);
+    console.log("text: ", $(event.target).text(), "city: ", city);
     var savedCity = $(event.target).text();
+    console.log("saved city: ", savedCity, "search-button: ", $("#search-button").text());
 
     if (!city && savedCity != $("#search-button").text()) {
       city = $(event.target).text();
@@ -54,7 +63,9 @@ $(document).ready(function () {
       $("#search-input").val("");
     }
 
+    console.log("city: ", city);
     var index = getStoredData(city);
+    console.log("index: ", index);
 
     if (index < 0) {
       var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q=";
@@ -77,12 +88,16 @@ $(document).ready(function () {
     }
     
     else {
+      console.log("gonna do the else!");
       getAndRenderData(index);
 
     }
+    console.log("returning from listener");
+    //return;
   });
 
   function getAndRenderData(index) {
+    console.log(index);
     queryURL =
       baseURL +
       "lat=" +
@@ -90,10 +105,13 @@ $(document).ready(function () {
       "&lon=" +
       cityData[index].lon +
       APIKey;
+    console.log(queryURL);
+
     $.ajax({
       url: queryURL,
       method: "GET",
     }).then(function (response) {
+      console.log(response);
 
       // the temperature (converted from Kelvin)
       var forecast = response.list;
@@ -106,13 +124,13 @@ $(document).ready(function () {
         forecast[0].weather[0].icon +
         "@2x.png'>";
       $(".city").html(
-        "<h4>" +
+        "<h2>" +
           cityData[index].name +
           " (" +
           today +
           ") " +
           weatherImg +
-          "</h4>"
+          "</h2>"
       );
       $(".temp").text("temprature: " + temperature + " °C");
       $(".wind").text("Wind: " + forecast[0].wind.speed + " KPH");
@@ -128,13 +146,10 @@ $(document).ready(function () {
           var col = $("<div>").addClass("col-md-2 col-12");
           var card = $("<div>").addClass("card");
           var body = $("<div>").addClass("card-body");
-          var title = $("<h6>")
+          var forecastDay = $("<h6>")
             .addClass("card-title")
-            .text(
-              moment(date).format("dddd") +
-                "\n" +
-                moment(date).format("DD/MM/YYYY")
-            );
+            .text(moment(date).format("dddd"))
+          var forecastDate = $("<h6>").addClass("card-title").text(moment(date).format("DD/MM/YYYY"));
           weatherImg = $("<img>").attr({
             width: "50px",
             height: "50px",
@@ -152,12 +167,12 @@ $(document).ready(function () {
             );
           var wind = $("<p>")
             .addClass("card-text")
-            .html("Wind: " + forecast[i].wind.speed + " KPH");
+            .html("Wind: " + forecast[i].wind.speed.toFixed(2) + " KPH");
           var humidity = $("<p>")
             .addClass("card-text")
-            .html("Humidity: " + forecast[i].main.humidity + "%");
+            .html("Humidity: " + forecast[i].main.humidity.toFixed(2) + "%");
           //var weather = $("<p>").addClass("card-text").html("Weather: " + forecast[i].weather[0].description);
-          body.append(title, weatherImg, temperature, wind, humidity);
+          body.append(forecastDay, forecastDate, weatherImg, temperature, wind, humidity);
           card.append(body);
           col.append(card);
           $("#forecast").append(col);
