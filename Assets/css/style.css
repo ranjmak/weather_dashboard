@@ -35,11 +35,6 @@
     margin: 0;
   }
   
-  main {
-    width: 96%;
-    margin: 2rem auto;
-  }
-  
 .input-group,  .form-group, .input-group-append, .form {
   width: 100%;
   padding-right: 0px;

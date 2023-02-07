@@ -26,17 +26,7 @@
         <h2 id="form-heading" class="mt-1 h3 form-label">
           Search for a City:
         </h2>
- <!--
-        <form id="search-form" class="col-md-3 col-12 form">
-              <input class="form-input weather-search" type="text" id="search-input" placeholder="London"
-                aria-labelledby="form-heading" aria-controls="today forecast" />
-
-                <button class="btn btn-outline btn-xl search-button" id="search-button" aria-label="submit search">
-                  Search
-                </button>
-                <hr class="weather">
-        </form>
--->
+        <!--input city name-->
         <form id="search-form" class="form">
           <div class="col-md-3 col-12 form-inline form-group">
             <div class="input-group">
@@ -55,6 +45,7 @@
       </aside>
 
       <div class="col-md-9 col-12 pb-4">
+        <!-- todays weather html generated dynamically after api call -->
         <section id="today" class="today mt-4" role="region" aria-live="polite">
           <div class="city" id="city"></div>
           <div class="weatherImg" id="weatherImg"></div>
@@ -62,6 +53,7 @@
           <div class="wind" id="wind"></div>
           <div class="humidity" id="humidity"></div>
         </section>
+        <!--the html for the 5 day forecast is generated dynamically after data is retrieved from the api call-->
         <section id="forecastTitle" class="row mt-4"></section>
         <section id="forecast" class="row mt-4" role="region" aria-live="polite">
         </section>
