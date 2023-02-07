@@ -38,11 +38,11 @@ SO THAT I can plan a trip accordingly
     * The humidity
   * When a user click on a city in the search history they are again presented with current and future conditions for that city
 
-## Mock-Up
+## screenshot
 
 The following image shows the web application's appearance and functionality:
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for London.](./assets/images/screenshot.png)
+![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for London.](./Assets/images/screenshot.png)
 
 ## notes
 due to the asynchronous nature of calling server api's, there is a need to not wait allow the page to render. As the code is making two API calls where the second call is reliant on the latitude & longitude coordinates returned from the initial call, some of the code logic needs to wait until the relevant data is returned. This changes the program flow a lot! comments are used throughout to explain the logic to help future readers.
